@@ -6,7 +6,7 @@ entity registerFile is
 	generic(
 		addWid: integer :=3;
 		dataWid: integer :=32
-			);
+		);
 	port(
 		src1, src2, dst	:	in	std_logic_vector(addWid-1 downto 0);
 		dataIn			:	in	std_logic_vector(dataWid-1 downto 0);
