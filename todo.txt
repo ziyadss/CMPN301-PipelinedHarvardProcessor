@@ -1,0 +1,9 @@
+PC add 1/2 not 2/4
+Call/ret to stack
+IN Port in decode
+RESET -> pc mux have option for M[0]
+Hazard detection unit for load use -> to stall
+Flushing
+Asynchronous Read for registers & buffers? (no need for clock)
+Everything with rising edge
+RegWrite with falling edge
