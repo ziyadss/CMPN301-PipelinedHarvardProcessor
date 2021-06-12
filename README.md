@@ -1,4 +1,4 @@
-# CMPN301-Project
+# CMPN301-PipelinedHarvardProcessor
  Computer Architecture Project - second year CUFE students.
 
  Design and implementation of a simple 5-stage pipelined Harvard processor.
