@@ -21,6 +21,9 @@ entity memoryStage is
 		resALUout	: out	std_logic_vector(31 downto 0);
 		addCallRet	: out	std_logic_vector(31 downto 0);
 		useRetAdd	: out	std_logic
+		
+		dstRegIn	: in	std_logic_vector(2 downto 0);
+		dstRegOut	: out	std_logic_vector(2 downto 0);
 		);
 end memoryStage;
 
@@ -64,5 +67,6 @@ begin
 	outPortOut <= outPortIn;
 	resALUout <= resALU;
 	MemoryOut <= dataOut;
+	dstRegOut <= dstRegIn;
 
 end archMemoryStage;
