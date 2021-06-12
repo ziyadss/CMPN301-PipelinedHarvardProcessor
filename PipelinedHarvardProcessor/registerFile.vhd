@@ -2,9 +2,13 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity registerFile is
+	generic(
+		addWid: integer :=3;
+		dataWid: integer :=32
+		);
 	port(
-		src1, src2, dst	:	in	std_logic_vector(2 downto 0);
-		dataIn			:	in	std_logic_vector(31 downto 0);
+		src1, src2, dst	:	in	std_logic_vector(addWid-1 downto 0);
+		dataIn			:	in	std_logic_vector(dataWid-1 downto 0);
 		wEn, clk, rst	:	in	std_logic
 		);
 end registerFile;
@@ -29,6 +33,10 @@ architecture archRegisterFile of registerFile is
 			);
 	end component;
 	
+	
+type regOut_type is array(0 to 2**n - 1) of std_logic_vector(unit-1 downto 0);
+signal ram: ram_type;
+
 --	signal outReg0: std_logic_vector (wid-1 downto 0);
 --	signal outReg1: std_logic_vector (wid-1 downto 0);
 --	signal outReg2: std_logic_vector (wid-1 downto 0);
