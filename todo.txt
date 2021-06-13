@@ -7,3 +7,15 @@ Flushing
 Asynchronous Read for registers & buffers? (no need for clock)
 Everything with rising edge
 RegWrite with falling edge
+
+
+
+
+
+DataSrc & CallRetEn
+
+
+00	ALU Src
+01	RET					(not DataSrc) and CallRetEn
+10	CALL
+11	STORE

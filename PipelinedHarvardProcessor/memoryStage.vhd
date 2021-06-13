@@ -20,10 +20,10 @@ entity memoryStage is
 		MemoryOut	: out	std_logic_vector(31 downto 0);
 		resALUout	: out	std_logic_vector(31 downto 0);
 		addCallRet	: out	std_logic_vector(31 downto 0);
-		useRetAdd	: out	std_logic
+		useRetAdd	: out	std_logic;
 		
 		dstRegIn	: in	std_logic_vector(2 downto 0);
-		dstRegOut	: out	std_logic_vector(2 downto 0);
+		dstRegOut	: out	std_logic_vector(2 downto 0)
 		);
 end memoryStage;
 
