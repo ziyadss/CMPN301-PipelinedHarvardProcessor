@@ -86,7 +86,6 @@ muxPC :        mux2x4      port map (  branch0,branch1,addOut,RST, selPC ,mux2x4
 pc    :   programCounter   port map (clk,mux2x4Out,pcOut);
 
 RST <= ramOut(31 downto 16);
-pcOut <= (others=>'0') when reset='1' else pcOut;
 
 addOutput<=addOut;
 instructionOut <= ramOut;
