@@ -22,6 +22,7 @@ architecture archRAM of RAM is
 	signal ram: ram_type;
 	
 begin
+
 	process(clk) is
 	begin
 		if rising_edge(clk) and wEn='1' then

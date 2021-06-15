@@ -57,7 +57,7 @@ begin
 	outPortBuf:		registerDD generic map (32)	port map (outPortIn,outPortOut,'1',clk,'0');
 	MemoryBuf:		registerDD generic map (32)	port map (MemoryIn,MemoryOut,'1',clk,'0');
 	resALUBuf:		registerDD generic map (32)	port map (resALUIn,resALUOut,'1',clk,'0');
-	dstRegBuf:		registerDD generic map (2) 	port map (dstRegIn,dstRegOut,'1',clk,'0');
+	dstRegBuf:		registerDD generic map (3) 	port map (dstRegIn,dstRegOut,'1',clk,'0');
 	
 	CtrlBufMemWb:	bufferMemWbControl port map(clk,outPortEnIn,Mem2RegIn,RegWriteIn,outPortEnOut,Mem2RegOut,RegWriteOut);
 
