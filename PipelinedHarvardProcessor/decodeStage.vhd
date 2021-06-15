@@ -1,81 +1,80 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 --Notes: stage runs at the very end of the first clk cycle 
-entity decodeStage is 
+ENTITY decodeStage IS
 
-port ( clk                   : in std_logic ;
-       addOutputFetch	     : in  std_logic_vector (15 downTO 0);
-	instructionIn	     : in  std_logic_vector (31 downTO 0);
-	datain	     	     : in  std_logic_vector(31 downTO 0) ;
-	dst		     : in std_logic_vector(2 downto 0);
-	wEn			: in std_logic;
-      data1, data2	: out std_logic_vector(31 downto 0);
-	immdVal		: out std_logic_vector (31 downto 0);
-	shiftImmdVal		: out std_logic_vector (31 downto 0);
-       addOutput       	     : out std_logic_vector (15 downTO 0);
-       instructionOut        : out std_logic_vector (31 downTO 0);
-	regWrite : OUT std_logic;
-	ALUSrc :   OUT std_logic_vector (1 downto 0);
-	ALUControl : OUT std_logic_vector (3 downto 0);
-	RegDst : OUT std_logic;
-	MemWrite : OUT std_logic;
-	MemRead : OUT std_logic ;
-	StackEn : OUT std_logic;
-	Mem2Reg : OUT std_logic;
-	CallRetEn : OUT std_logic;
-	FlagOp : OUT std_logic;
-	JmpOpEn :OUT std_logic;
-	JmpOP : OUT std_logic_vector (1 downto 0);
-	ImmVal : OUT std_logic_vector (1 downto 0)
-);                                                
+	PORT (
+		clk : IN STD_LOGIC;
+		addOutputFetch : IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		instructionIn : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+		datain : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		dst : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+		wEn : IN STD_LOGIC;
+		data1, data2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		immdVal : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+		shiftImmdVal : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+		addOutput : OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+		instructionOut : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+		regWrite : OUT STD_LOGIC;
+		ALUSrc : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+		ALUControl : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+		RegDst : OUT STD_LOGIC;
+		MemWrite : OUT STD_LOGIC;
+		MemRead : OUT STD_LOGIC;
+		StackEn : OUT STD_LOGIC;
+		Mem2Reg : OUT STD_LOGIC;
+		CallRetEn : OUT STD_LOGIC;
+		FlagOp : OUT STD_LOGIC;
+		JmpOpEn : OUT STD_LOGIC;
+		JmpOP : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+		ImmVal : OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
+	);
 
-end decodeStage ;
+END decodeStage;
+ARCHITECTURE decodeStage_arch OF decodeStage IS
 
-
-architecture decodeStage_arch of decodeStage is
-
-Component controlUnit is
-Port( opCode : IN std_logic_vector (4 downto 0);
-	clk : IN std_logic;
-	regWrite : OUT std_logic;
-	ALUSrc :   OUT std_logic_vector (1 downto 0);
-	ALUControl : OUT std_logic_vector (3 downto 0);
-	RegDst : OUT std_logic;
-	MemWrite : OUT std_logic;
-	MemRead : OUT std_logic ;
-	StackEn : OUT std_logic;
-	Mem2Reg : OUT std_logic;
-	CallRetEn : OUT std_logic;
-	FlagOp : OUT std_logic;
-	JmpOpEn :OUT std_logic;
-	JmpOP : OUT std_logic_vector (1 downto 0);
-	ImmVal : OUT std_logic_vector (1 downto 0)
-);
-End component;
-
-component registerFile is
-	generic(
-		addWid: integer :=3;
-		dataWid: integer :=32
-			);
-	port(
-		src1, src2, dst	:	in	std_logic_vector(addWid-1 downto 0);
-		dataIn			:	in	std_logic_vector(dataWid-1 downto 0);
-		data1, data2	: out std_logic_vector(dataWid-1 downto 0);
-		wEn, clk, rst	:	in	std_logic
+	COMPONENT controlUnit IS
+		PORT (
+			opCode : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+			clk : IN STD_LOGIC;
+			regWrite : OUT STD_LOGIC;
+			ALUSrc : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+			ALUControl : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+			RegDst : OUT STD_LOGIC;
+			MemWrite : OUT STD_LOGIC;
+			MemRead : OUT STD_LOGIC;
+			StackEn : OUT STD_LOGIC;
+			Mem2Reg : OUT STD_LOGIC;
+			CallRetEn : OUT STD_LOGIC;
+			FlagOp : OUT STD_LOGIC;
+			JmpOpEn : OUT STD_LOGIC;
+			JmpOP : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+			ImmVal : OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
 		);
-end component;
+	END COMPONENT;
 
---signal RegWrite,RegDst, MemWrite,MemRead,StackEn,Mem2Reg,CallRetEn,FlagOp,JmpOpEn : std_logic;
+	COMPONENT registerFile IS
+		GENERIC (
+			addWid : INTEGER := 3;
+			dataWid : INTEGER := 32
+		);
+		PORT (
+			src1, src2, dst : IN STD_LOGIC_VECTOR(addWid - 1 DOWNTO 0);
+			dataIn : IN STD_LOGIC_VECTOR(dataWid - 1 DOWNTO 0);
+			data1, data2 : OUT STD_LOGIC_VECTOR(dataWid - 1 DOWNTO 0);
+			wEn, clk, rst : IN STD_LOGIC
+		);
+	END COMPONENT;
 
-	begin
-	controlUnitU : controlUnit port map(instructionIn(31 downto 27),clk,regWrite,ALUSrc,ALUControl,RegDst,MemWrite,MemRead,StackEn,Mem2Reg,CallRetEn,FlagOp,JmpOpEn,JmpOP,ImmVal);
-	registerFileU : registerFile generic map(3,32) port map(instructionIn(26 downto 24),instructionIn(23 downto 21),dst,datain,data1,data2,wEn,clk,'0');
-	shiftImmdVal <= (31 downto 5 => '0')&instructionIn(20 downto 16);
-	immdVal <= (31 downto 16 => '0') & instructionIn(15 downto 0);
+	--signal RegWrite,RegDst, MemWrite,MemRead,StackEn,Mem2Reg,CallRetEn,FlagOp,JmpOpEn : std_logic;
+
+BEGIN
+	controlUnitU : controlUnit PORT MAP(instructionIn(31 DOWNTO 27), clk, regWrite, ALUSrc, ALUControl, RegDst, MemWrite, MemRead, StackEn, Mem2Reg, CallRetEn, FlagOp, JmpOpEn, JmpOP, ImmVal);
+	registerFileU : registerFile GENERIC MAP(3, 32) PORT MAP(instructionIn(26 DOWNTO 24), instructionIn(23 DOWNTO 21), dst, datain, data1, data2, wEn, clk, '0');
+	shiftImmdVal <= (31 DOWNTO 5 => '0') & instructionIn(20 DOWNTO 16);
+	immdVal <= (31 DOWNTO 16 => '0') & instructionIn(15 DOWNTO 0);
 	addOutput <= addOutputFetch;
 	instructionOut <= instructionIn;
-	
-end decodeStage_arch;
 
+END decodeStage_arch;
