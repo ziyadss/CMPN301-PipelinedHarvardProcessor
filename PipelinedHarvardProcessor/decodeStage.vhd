@@ -1,8 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
-
-
+--Notes: stage runs at the very end of the first clk cycle 
 entity decodeStage is 
 
 port ( clk                   : in std_logic ;
@@ -72,6 +71,11 @@ end component;
 
 	begin
 	controlUnitU : controlUnit port map(instructionIn(31 downto 27),clk,regWrite,ALUSrc,ALUControl,RegDst,MemWrite,MemRead,StackEn,Mem2Reg,CallRetEn,FlagOp,JmpOpEn,JmpOP,ImmVal);
-	registerFileU : registerFile generic map(3,32) port map(instructionIn(26 downto 24),dst,datain,data1,data2,wEn,clk,'0');
-end decodeStage
+	registerFileU : registerFile generic map(3,32) port map(instructionIn(26 downto 24),instructionIn(23 downto 21),dst,datain,data1,data2,wEn,clk,'0');
+	shiftImmdVal <= (31 downto 5 => '0')&instructionIn(20 downto 16);
+	immdVal <= (31 downto 16 => '0') & instructionIn(15 downto 0);
+	addOutput <= addOutputFetch;
+	instructionOut <= instructionIn;
+	
+end decodeStage_arch;
 
