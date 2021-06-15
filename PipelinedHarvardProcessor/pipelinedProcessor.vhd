@@ -179,62 +179,26 @@ architecture archPipelinedProcessor of pipelinedProcessor is
 	
 	signal DoCallRet : std_logic;
 	
-signal regWrite_DE	: std_logic;
-signal ALUSrc_DE	: std_logic_vector (1 downto 0);
-signal ALUControl_DE: std_logic_vector (3 downto 0);
-signal RegDst_DE	: std_logic;
-signal MemWrite_DE	: std_logic;
-signal MemRead_DE	: std_logic;
-signal StackEn_DE	: std_logic;
-signal Mem2Reg_DE	: std_logic;
-signal CallRetEn_DE	: std_logic;
-signal FlagOp_DE	: std_logic;
-signal JmpOpEn_DE	: std_logic;
-signal JmpOP_DE		: std_logic_vector (1 downto 0);
-signal ImmVal_DE	: std_logic_vector (1 downto 0);
+	signal ALUControl_DE: std_logic_vector (3 downto 0);
+	signal regWrite_DE,RegDst_DE,MemWrite_DE,MemRead_DE,StackEn_DE,Mem2Reg_DE,CallRetEn_DE,FlagOp_DE,JmpOpEn_DE	: std_logic;
+	signal ALUSrc_DE,JmpOP_DE,ImmVal_DE		: std_logic_vector (1 downto 0);
+		
+	signal memWrite_EM,memRead_EM,stackEn_EM,DataSrc_EM,CallRetEn_EM,outPortEn_EM,Mem2Reg_EM,RegWrite_EM	: std_logic;
+	signal memWrite_M,memRead_M,stackEn_M,DataSrc_M,CallRetEn_M,outPortEn_M,Mem2Reg_M,RegWrite_M	: std_logic;
+	signal outPort_EM,resALU_EM,dataStore_EM	: std_logic_vector(31 downto 0);
+	signal PC_EM		: std_logic_vector(15 downto 0);
+	signal dstReg_EM	: std_logic_vector(2 downto 0);
+	signal PC_M		: std_logic_vector(15 downto 0);
+	signal outPort_M,resALU_M,dataStore_M	: std_logic_vector(31 downto 0);
+	signal dstReg_M	: std_logic_vector(2 downto 0);
 	
-signal memWrite_EM	: std_logic;
-signal memRead_EM	: std_logic;
-signal stackEn_EM	: std_logic;
-signal DataSrc_EM	: std_logic;
-signal CallRetEn_EM	: std_logic;
-signal memWrite_M	: std_logic;
-signal memRead_M	: std_logic;
-signal stackEn_M	: std_logic;
-signal DataSrc_M	: std_logic;
-signal CallRetEn_M: std_logic;
-signal outPortEn_EM	: std_logic;
-signal Mem2Reg_EM	: std_logic;
-signal RegWrite_EM	: std_logic;
-signal outPortEn_M: std_logic;
-signal Mem2Reg_M	: std_logic;
-signal RegWrite_M	: std_logic;
-signal outPort_EM	: std_logic_vector(31 downto 0);
-signal PC_EM		: std_logic_vector(15 downto 0);
-signal resALU_EM	: std_logic_vector(31 downto 0);
-signal dataStore_EM	: std_logic_vector(31 downto 0);
-signal dstReg_EM	: std_logic_vector(2 downto 0);
-signal outPort_M	: std_logic_vector(31 downto 0);
-signal PC_M		: std_logic_vector(15 downto 0);
-signal resALU_M	: std_logic_vector(31 downto 0);
-signal dataStore_M: std_logic_vector(31 downto 0);
-signal dstReg_M	: std_logic_vector(2 downto 0);
-
-signal dstReg_MW	: std_logic_vector(2 downto 0);
-signal outPort_MW	: std_logic_vector(31 downto 0);
-signal Memory_MW	: std_logic_vector(31 downto 0);
-signal resALU_MW	: std_logic_vector(31 downto 0);
-signal outPortEn_MW: std_logic;
-signal Mem2Reg_MW	: std_logic;
-signal RegWrite_MW	: std_logic;
-
-signal outPortEn_W: std_logic;
-signal Mem2Reg_W	: std_logic;
-signal RegWrite_W	: std_logic;
-signal outPort_W	: std_logic_vector(31 downto 0);
-signal Memory_W	: std_logic_vector(31 downto 0);
-signal resALU_W	: std_logic_vector(31 downto 0);
-signal dstReg_W	: std_logic_vector(2 downto 0);
+	signal dstReg_MW	: std_logic_vector(2 downto 0);
+	signal outPort_MW,Memory_MW,resALU_MW	: std_logic_vector(31 downto 0);
+	signal outPortEn_MW,Mem2Reg_MW,RegWrite_MW: std_logic;
+	
+	signal outPortEn_W,Mem2Reg_W,RegWrite_W: std_logic;
+	signal outPort_W,Memory_W,resALU_W	: std_logic_vector(31 downto 0);
+	signal dstReg_W	: std_logic_vector(2 downto 0);
 
 begin
 	
