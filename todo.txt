@@ -1,17 +1,15 @@
-PC add 1/2 not 2/4
-Call/ret to stack
-IN Port in decode
-RESET -> pc mux have option for M[0]
-Hazard detection unit for load use -> to stall
-Flushing
-Asynchronous Read for registers & buffers? (no need for clock)
-Everything with rising edge
-RegWrite with falling edge
+PC add 1/2 not 2/4													DONE
+Call/ret to stack                                                   DONE	-	execute stage part left
+IN Port in decode                                                   not yet
+RESET -> pc mux have option for M[0]                                DONE	-	not tested
+Hazard detection unit for load use -> to stall                      ????
+Flushing                                                            ????
+Asynchronous Read for registers & buffers? (no need for clock)      NOP?
+Everything with rising edge                                         DONE?
+RegWrite with falling edge                                          DONE
 
 
-
-
-
+Note:
 DataSrc & CallRetEn
 
 

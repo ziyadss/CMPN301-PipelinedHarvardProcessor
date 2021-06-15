@@ -302,5 +302,7 @@ begin
 	
 	WriteBack: writeBackStage port map(outPortEn_W,outPort_W,Memory_W,resALU_W,dstReg_W,Mem2Reg_W,RegWrite_W,outPort,WB_En,WB_Data,WB_Dst);
 	
+	--forwarding unit
+	
 end archPipelinedProcessor;
 
