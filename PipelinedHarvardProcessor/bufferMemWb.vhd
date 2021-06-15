@@ -59,6 +59,6 @@ begin
 	resALUBuf:		registerDD generic map (32)	port map (resALUIn,resALUOut,'1',clk,'0');
 	dstRegBuf:		registerDD generic map (2) 	port map (dstRegIn,dstRegOut,'1',clk,'0');
 	
-	ControlBuf:		bufferMemWbControl port map(clk,outPortEnIn,Mem2RegIn,RegWriteIn,outPortEnOut,Mem2RegOut,RegWriteOut);
+	CtrlBufMemWb:	bufferMemWbControl port map(clk,outPortEnIn,Mem2RegIn,RegWriteIn,outPortEnOut,Mem2RegOut,RegWriteOut);
 
 end archBufferMemWb;

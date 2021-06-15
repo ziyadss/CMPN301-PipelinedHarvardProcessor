@@ -12,16 +12,23 @@ entity memoryStage is
 		CallRetEn	: in	std_logic;
 		outPortIn	: in	std_logic_vector(31 downto 0);
 		PC			: in	std_logic_vector(15 downto 0);
-		resALU		: in	std_logic_vector(31 downto 0);
+		resALUin	: in	std_logic_vector(31 downto 0);
 		dataStore	: in	std_logic_vector(31 downto 0);
+		outPortEnIn	: in	std_logic;
+		Mem2RegIn	: in	std_logic;
+		RegWriteIn	: in	std_logic;
+		dstRegIn	: in	std_logic_vector(2 downto 0);
+		
+		addCallRet	: out	std_logic_vector(15 downto 0);	-- to PC								size?
+		useRetAdd	: out	std_logic;						
+		
+		dstRegOut	: out	std_logic_vector(2 downto 0);	--to buffer
 		outPortOut	: out	std_logic_vector(31 downto 0);
 		MemoryOut	: out	std_logic_vector(31 downto 0);
 		resALUout	: out	std_logic_vector(31 downto 0);
-		addCallRet	: out	std_logic_vector(31 downto 0);
-		useRetAdd	: out	std_logic;
-		
-		dstRegIn	: in	std_logic_vector(2 downto 0);
-		dstRegOut	: out	std_logic_vector(2 downto 0)
+		outPortEnOut: out	std_logic;
+		Mem2RegOut	: out	std_logic;
+		RegWriteOut	: out	std_logic
 		);
 end memoryStage;
 
@@ -29,13 +36,13 @@ architecture archMemoryStage of memoryStage is
 
 	component RAM is
 		generic(
-			AddWid: integer :=6;
-			unit: integer :=8
+			AddWid: integer :=20;
+			unit: integer :=16
 				);
 		port(
 			address: in std_logic_vector (AddWid-1 downto 0);
-			dataIn: in std_logic_vector (unit-1 downto 0);
-			dataOut: out std_logic_vector (unit-1 downto 0);
+			dataIn: in std_logic_vector (2*unit-1 downto 0);
+			dataOut: out std_logic_vector (2*unit-1 downto 0);
 			wEn, clk, rst: in std_logic
 			);
 	end component;
@@ -57,13 +64,13 @@ architecture archMemoryStage of memoryStage is
 	
 begin
 	
-	MemAdd <= stackIn(19 downto 0) when stackEn='1' else resALU(19 downto 0);
+	MemAdd <= stackIn(19 downto 0) when stackEn='1' else resALUin(19 downto 0);
 	
 	dataIn <= "0000000000000000" & PC when DataSrc='1' and CallRetEn='0'
 	else dataStore when DataSrc='1' and CallRetEn='1'
-	else resALU;
+	else resALUin;
 	
-	addCallRet <= dataOut;
+	addCallRet <= dataOut(15 downto 0);
 	useRetAdd <= (not DataSrc) and CallRetEn;
 	
 	stackOut <= std_logic_vector(to_unsigned(to_integer(unsigned(stackIn)) + stackIncr,32));
@@ -74,8 +81,12 @@ begin
 	SP: registerDD generic map(32) port map(stackIn, stackOut, stackEn, clk, '0');
 	
 	outPortOut <= outPortIn;
-	resALUout <= resALU;
+	resALUout <= resALUin;
 	MemoryOut <= dataOut;
 	dstRegOut <= dstRegIn;
+	
+	outPortEnOut <= outPortEnIn;
+	Mem2RegOut	 <= Mem2RegIn;
+	RegWriteOut	 <= RegWriteIn;
 
 end archMemoryStage;

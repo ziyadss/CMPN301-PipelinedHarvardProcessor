@@ -23,6 +23,6 @@ out R1
 out R2
 
 # Credit test case ends here
-SETC
-RLC R1         #R1= D, C--> 0, N-->0, Z-->0
-RRC R2         #R2= 7FFFFFF7, C--> 1, N-->0 , Z-->0
+#SETC
+#RLC R1         #R1= D, C--> 0, N-->0, Z-->0
+#RRC R2         #R2= 7FFFFFF7, C--> 1, N-->0 , Z-->0

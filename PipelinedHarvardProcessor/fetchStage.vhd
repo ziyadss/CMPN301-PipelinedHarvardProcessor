@@ -9,7 +9,9 @@ port ( clk                   : in std_logic ;
        branch0		     : in  std_logic_vector (15 downTO 0);
        branch1		     : in  std_logic_vector (15 downTO 0);
        addOutput       	     : out std_logic_vector (15 downTO 0);
-       instructionOut        : out std_logic_vector (31 downTO 0)
+       instructionOut        : out std_logic_vector (31 downTO 0);
+	   reset	:	in	std_logic;
+	   DoCallRet : in std_logic
 );                                                
 
 end fetchStage ;
@@ -64,11 +66,10 @@ signal ramOut:std_logic_vector (31 downto 0);
 signal mux2x1Out:std_logic_vector (1 downto 0);
 signal selOf2x1 : std_logic;
 
-signal unknown  : std_logic_vector (1 downto 0):="10";
-
+signal selPC  : std_logic_vector (1 downto 0);									--------------11 for reset, 10 default, 00 for jump, 01 for Call/Ret
+																				-- need to input jump conditions
 begin
 
-RST <=(others=>'0');
 zeroo<=(others=>'0');
 
 process(clk)
@@ -80,10 +81,15 @@ end if;
 end process;
 addOut <= std_logic_vector(to_unsigned(to_integer(unsigned(mux2x1Out))+to_integer(unsigned(pcOut)),16));
 
+selPC <= "11" when reset='1' else "01" when DoCallRet='1' else "10";					--incomplete, check for jump, when??
+
 muxadder :  mux2x1         port map ( selOf2x1 ,mux2x1Out);
 RAM1   : InstrMem generic map(16,16) port map (clk ,'0','0', pcOut,zeroo,ramOut);
-muxPC :        mux2x4      port map (  branch0,branch1,addOut,RST, unknown ,mux2x4Out);
+muxPC :        mux2x4      port map (  branch0,branch1,addOut,RST, selPC ,mux2x4Out);
 pc    :   programCounter   port map (clk,mux2x4Out,pcOut);
+
+RST <= ramOut(31 downto 16);
+pcOut <= (others=>'0') when reset='1' else pcOut;
 
 addOutput<=addOut;
 instructionOut <= ramOut;
