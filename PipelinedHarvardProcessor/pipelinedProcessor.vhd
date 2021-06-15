@@ -64,6 +64,56 @@ architecture archPipelinedProcessor of pipelinedProcessor is
 		);
 	END component;
 	
+	component bufferDecodeEx IS
+		PORT (
+			clk : IN STD_LOGIC;
+			data1In, data2In : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+			immdValIn : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+			shiftImmdValIn : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+			addOutputIn : IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+			instructionIn : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+			regWriteIn : IN STD_LOGIC;
+			ALUSrcIn : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+			ALUControlIn : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+			RegDstIn : IN STD_LOGIC;
+			MemWriteIn : IN STD_LOGIC;
+			MemReadIn : IN STD_LOGIC;
+			StackEnIn : IN STD_LOGIC;
+			Mem2RegIn : IN STD_LOGIC;
+			CallRetEnIn : IN STD_LOGIC;
+			FlagOpIn : IN STD_LOGIC;
+			JmpOpEnIn : IN STD_LOGIC;
+			JmpOPIn : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+			ImmValIn : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+			data1SrcIn, data2SrcIn : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+			outPortEnIn : IN STD_LOGIC;
+			DataSrcIn : IN STD_LOGIC;
+	
+			data1Out, data2Out : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+			immdValOut : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+			shiftImmdValOut : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+			addOutputOut : OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+			instructionOut : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+			regWriteOut : OUT STD_LOGIC;
+			ALUSrcOut : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+			ALUControlOut : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+			RegDstOut : OUT STD_LOGIC;
+			MemWriteOut : OUT STD_LOGIC;
+			MemReadOut : OUT STD_LOGIC;
+			StackEnOut : OUT STD_LOGIC;
+			Mem2RegOut : OUT STD_LOGIC;
+			CallRetEnOut : OUT STD_LOGIC;
+			FlagOpOut : OUT STD_LOGIC;
+			JmpOpEnOut : OUT STD_LOGIC;
+			JmpOPOut : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+			ImmValOut : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+			data1SrcOut, data2SrcOut : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+			outPortEnOut : OUT STD_LOGIC;
+			DataSrcOut : OUT STD_LOGIC
+	
+		);
+	END component;
+	
 	component bufferExMem is
 		port(
 			clk			: in	std_logic;
@@ -199,6 +249,37 @@ architecture archPipelinedProcessor of pipelinedProcessor is
 	signal outPortEn_W,Mem2Reg_W,RegWrite_W: std_logic;
 	signal outPort_W,Memory_W,resALU_W	: std_logic_vector(31 downto 0);
 	signal dstReg_W	: std_logic_vector(2 downto 0);
+	
+	
+	signal data1_DE, data2_DE : STD_LOGIC_VECTOR(31 DOWNTO 0);
+	signal immdVal_DE : STD_LOGIC_VECTOR (31 DOWNTO 0);
+	signal shiftImmdVal_DE : STD_LOGIC_VECTOR (31 DOWNTO 0);
+	signal addOutput_DE : STD_LOGIC_VECTOR (15 DOWNTO 0);
+	signal data1Src_DE, data2Src_DE : STD_LOGIC_VECTOR (2 DOWNTO 0);
+	signal outPortEn_DE : STD_LOGIC;
+	signal DataSrc_DE : STD_LOGIC;
+	
+	signal data1_E, data2_E : STD_LOGIC_VECTOR(31 DOWNTO 0);
+	signal immdVal_E : STD_LOGIC_VECTOR (31 DOWNTO 0);
+	signal shiftImmdVal_E : STD_LOGIC_VECTOR (31 DOWNTO 0);
+	signal addOutput_E : STD_LOGIC_VECTOR (15 DOWNTO 0);
+	signal instruction_E : STD_LOGIC_VECTOR (31 DOWNTO 0);
+	signal regWrite_E : STD_LOGIC;
+	signal ALUSrc_E : STD_LOGIC_VECTOR (1 DOWNTO 0);
+	signal ALUControl_E : STD_LOGIC_VECTOR (3 DOWNTO 0);
+	signal RegDst_E : STD_LOGIC;
+	signal MemWrite_E : STD_LOGIC;
+	signal MemRead_E : STD_LOGIC;
+	signal StackEn_E : STD_LOGIC;
+	signal Mem2Reg_E : STD_LOGIC;
+	signal CallRetEn_E : STD_LOGIC;
+	signal FlagOp_E : STD_LOGIC;
+	signal JmpOpEn_E : STD_LOGIC;
+	signal JmpOP_E : STD_LOGIC_VECTOR (1 DOWNTO 0);
+	signal ImmVal_E : STD_LOGIC_VECTOR (1 DOWNTO 0);
+	signal data1Src_E, data2Src_E : STD_LOGIC_VECTOR (2 DOWNTO 0);
+	signal outPortEn_E : STD_LOGIC;
+	signal DataSrc_E : STD_LOGIC;
 
 begin
 	
@@ -209,7 +290,8 @@ begin
 	Decode: decodeStage port map(clk,nextPC_D,instruction_D,WB_Data,WB_Dst,WB_En,Reg1_DE, Reg2_DE,Imm_DE,shImm_DE,nextPC_DE,instruction_DE,regWrite_DE,ALUSrc_DE,ALUControl_DE,RegDst_DE,MemWrite_DE,MemRead_DE,StackEn_DE,Mem2Reg_DE,CallRetEn_DE,FlagOp_DE,JmpOpEn_DE,JmpOP_DE,ImmVal_DE);
 	--input port here
 	
-	--ID_EX_Buffer
+	ID_EX_Buffer: bufferDecodeEx port map(clk, data1_DE, data2_DE, immdVal_DE, shiftImmdVal_DE, addOutput_DE, instruction_DE, regWrite_DE, ALUSrc_DE, ALUControl_DE, RegDst_DE, MemWrite_DE, MemRead_DE, StackEn_DE, Mem2Reg_DE, CallRetEn_DE, FlagOp_DE, JmpOpEn_DE, JmpOP_DE, ImmVal_DE, data1Src_DE, data2Src_DE, outPortEn_DE, DataSrc_DE, data1_E, data2_E, immdVal_E, shiftImmdVal_E, addOutput_E, instruction_E, regWrite_E, ALUSrc_E, ALUControl_E, RegDst_E, MemWrite_E, MemRead_E, StackEn_E, Mem2Reg_E, CallRetEn_E, FlagOp_E, JmpOpEn_E, JmpOP_E, ImmVal_E, data1Src_E, data2Src_E, outPortEn_E, DataSrc_E);
+	
 	--Execute
 	
 	EX_MEM_Buffer: bufferExMem port map(clk,memWrite_EM,memRead_EM,stackEn_EM,DataSrc_EM,CallRetEn_EM,memWrite_M,memRead_M,stackEn_M,DataSrc_M,CallRetEn_M,outPortEn_EM,Mem2Reg_EM,RegWrite_EM,outPortEn_M,Mem2Reg_M,RegWrite_M,outPort_EM,PC_EM,resALU_EM,dataStore_EM,dstReg_EM,outPort_M,PC_M,resALU_M,dataStore_M,dstReg_M);

@@ -36,7 +36,7 @@ def outputMemory(memory):
 // format=mti addressradix=h dataradix=s version=1.0 wordsperline=4''')
         for k in sorted(memory):
             if k % 4 == 0:
-                f.write('\n')
+                f.write(f'\n{k:x}: ')
             f.write(f'{memory[k]} ')
 
 def asm2mem(fileName):
