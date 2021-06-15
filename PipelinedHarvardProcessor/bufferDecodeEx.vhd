@@ -128,5 +128,11 @@ BEGIN
     shiftImmdValBuff : registerDD GENERIC MAP(32) PORT MAP(shiftImmdValIn, shiftImmdValOut, en => '1', clk => clk, rst => '0');
     addOutputBuff : registerDD GENERIC MAP(16) PORT MAP(addOutputIn, addOutputOut, en => '1', clk => clk, rst => '0');
     instructionBuff : registerDD GENERIC MAP(32) PORT MAP(instructionIn, instructionOut, en => '1', clk => clk, rst => '0');
+	
+	RegDstBuff : registerDD GENERIC MAP(1) PORT MAP(d(0)=>RegDstIn, q(0)=>RegDstOut, en=>'1', clk=>clk, rst=>'0');
+	FlagOpBuff : registerDD GENERIC MAP(1) PORT MAP(d(0)=>FlagOpIn, q(0)=>FlagOpOut, en=>'1', clk=>clk, rst=>'0');
+	JmpOpEnBuff : registerDD GENERIC MAP(1) PORT MAP(d(0)=>JmpOpEnIn, q(0)=>JmpOpEnOut, en=>'1', clk=>clk, rst=>'0');
+	JmpOPBuff : registerDD GENERIC MAP(2) PORT MAP(JmpOPIn, JmpOPOut, en=>'1', clk=>clk, rst=>'0');
+	
 
 END bufferDecodeEx_arch;
