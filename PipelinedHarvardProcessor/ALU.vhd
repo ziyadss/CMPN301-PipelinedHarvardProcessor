@@ -41,7 +41,7 @@ std_logic_vector((unsigned('0' & OP1)) - (unsigned('0' &OP2))) when "1100", --SU
 '0' & (OP1 or OP2) when "0101", --OR
 --OP1()& OP1(31-to_integer(unsigned(OP2)) downTO 0) & others=>'0' when
 OP1(to_integer(32 - unsigned(OP2)))& std_logic_vector(shift_Left(unsigned(OP1),to_integer(unsigned(OP2)))) when "1000",  --SHL
-std_logic_vector(shift_Right(unsigned(OP1),to_integer(unsigned(OP2)))) when "1001", --SHR
+'0' & std_logic_vector(shift_Right(unsigned(OP1),to_integer(unsigned(OP2)))) when "1001", --SHR
 std_logic_vector((unsigned('0' & OP1)) + (unsigned('0' &OP2))) when "1111", --IADD
 '0' & ZERO when others; -- ELSE
 
