@@ -457,7 +457,7 @@ BEGIN
 			IF (opCode = "11110") THEN --IADD
 				regWrite <= '1';
 				ALUSrc <= "11";
-				ALUControl <= "0000";
+				ALUControl <= "1111";
 				RegDst <= '1';
 				MemWrite <= '0';
 				MemRead <= '0';

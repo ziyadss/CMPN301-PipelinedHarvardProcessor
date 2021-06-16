@@ -128,5 +128,5 @@ BEGIN
     shiftImmdValBuff : registerDD GENERIC MAP(32) PORT MAP(shiftImmdValIn, shiftImmdValOut, en => '1', clk => clk, rst => '0');
     addOutputBuff : registerDD GENERIC MAP(16) PORT MAP(addOutputIn, addOutputOut, en => '1', clk => clk, rst => '0');
     instructionBuff : registerDD GENERIC MAP(32) PORT MAP(instructionIn, instructionOut, en => '1', clk => clk, rst => '0');
-
+    ALUSrcBuff : registerDD GENERIC MAP(2) PORT MAP(ALUSrcIn,ALUSrcOut, en => '1', clk => clk, rst => '0');
 END bufferDecodeEx_arch;
