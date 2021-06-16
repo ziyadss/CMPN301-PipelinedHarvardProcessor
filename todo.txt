@@ -17,3 +17,16 @@ DataSrc & CallRetEn
 01	RET					(not DataSrc) and CallRetEn
 10	CALL
 11	STORE
+
+
+
+hazard detection takes
+memread
+regdst from memory
+reg1&2 from decode
+
+like forwarding minus WB
+
+mux infront of DE buffer, gives it 0 to stall, also stops fetch somehow?
+also gives PC signal to delay 1?
+condition from slides
