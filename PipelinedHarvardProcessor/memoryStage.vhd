@@ -68,8 +68,8 @@ begin
 	MemAdd <= stackOut(19 downto 0) when stackEn='1' else resALUin(19 downto 0);
 	
 	dataIn <= "0000000000000000" & PC when DataSrc='1' and CallRetEn='1'
-	else dataStore when DataSrc='1' and MemWrite='1'
-	else resALUin;
+	else resALUin when stackEn='1' and CallRetEn='0'
+	else dataStore when DataSrc='1' and MemWrite='1';
 	
 	addCallRet <= dataOut(15 downto 0);
 	useRetAdd <= (not DataSrc) and CallRetEn;
@@ -77,20 +77,28 @@ begin
 	process(clk) is
 	begin
 	if rising_edge(clk) then
-	if MemWrite='1' and stackEn='1' then
-		stackIn <= std_logic_vector(to_signed(to_integer(signed(stackOut))-2,32));
-		elsif MemRead='1' and stackEn='1' then
+		if MemRead='1' and stackEn='1' then
 		stackIn <= std_logic_vector(to_signed(to_integer(signed(stackOut))+2,32));
 		else
 		stackIn <= stackOut;
 		end if;
 	end if;
+	
+	if falling_edge(clk) then
+		if MemWrite='1' and stackEn='1' then
+		stackIn <= std_logic_vector(to_signed(to_integer(signed(stackOut))-2,32));
+		else
+		stackIn <= stackOut;
+		end if;
+	end if;
+	
 	end process;
 	
 	--stackIncr <= -2 when MemWrite='1' and stackEn='1' else 2 when MemRead='1' and stackEn='1' else 0;
 	
 	Memory: RAM generic map(20, 16) port map(MemAdd, dataIn,dataOut, memWrite, clk, '0');
-	SP: registerDD generic map(32) port map(stackIn, stackOut, stackEn, clk, '0');
+	--SP: registerDD generic map(32) port map(stackIn, stackOut, stackEn, clk, '0');
+	stackOut <= stackIn;
 	
 	outPortOut <= outPortIn;
 	resALUout <= resALUin;

@@ -338,7 +338,7 @@ BEGIN
 			IF (opCode = "10110") THEN --PUSH
 				regWrite <= '0';
 				ALUSrc <= "00";
-				ALUControl <= "0000";
+				ALUControl <= "1110";
 				RegDst <= '0';
 				MemWrite <= '1';
 				MemRead <= '0';

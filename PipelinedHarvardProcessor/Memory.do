@@ -62,4 +62,7 @@ run
 run
 run
 run
+run
+run
+run
 mem save -o C:/Users/Ziyad/Desktop/check.mem -f {} /pipelinedprocessor/Memory/Memory/ram
