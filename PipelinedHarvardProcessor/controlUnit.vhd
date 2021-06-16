@@ -440,7 +440,7 @@ BEGIN
 			IF (opCode = "11100") THEN --LDD
 				regWrite <= '1';
 				ALUSrc <= "11";
-				ALUControl <= "0000";
+				ALUControl <= "0111";
 				RegDst <= '1';
 				MemWrite <= '0';
 				MemRead <= '1';
@@ -457,7 +457,7 @@ BEGIN
 			IF (opCode = "11101") THEN --STD
 				regWrite <= '0';
 				ALUSrc <= "11";
-				ALUControl <= "0000";
+				ALUControl <= "0111";
 				RegDst <= '0';
 				MemWrite <= '1';
 				MemRead <= '0';

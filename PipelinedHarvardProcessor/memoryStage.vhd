@@ -60,7 +60,8 @@ architecture archMemoryStage of memoryStage is
 	signal dataIn, dataOut: std_logic_vector(31 downto 0);
 	signal stackIn: std_logic_vector(31 downto 0) :=std_logic_vector(to_unsigned(2**20 - 2,32));
 	signal stackOut: std_logic_vector(31 downto 0):=std_logic_vector(to_unsigned(2**20 - 2,32));
-	signal stackIncr: integer;
+	signal writeClk: std_logic;
+	--signal stackIncr: integer;
 	
 begin
 	
@@ -73,7 +74,18 @@ begin
 	addCallRet <= dataOut(15 downto 0);
 	useRetAdd <= (not DataSrc) and CallRetEn;
 	
-	stackIn <= std_logic_vector(to_unsigned(to_integer(unsigned(stackOut))-2,32)) when MemWrite='1' and stackEn='1' else std_logic_vector(to_unsigned(to_integer(unsigned(stackOut))+2,32)) when MemRead='1' and stackEn='1' else stackOut;
+	process(clk) is
+	begin
+	if rising_edge(clk) then
+	if MemWrite='1' and stackEn='1' then
+		stackIn <= std_logic_vector(to_signed(to_integer(signed(stackOut))-2,32));
+		elsif MemRead='1' and stackEn='1' then
+		stackIn <= std_logic_vector(to_signed(to_integer(signed(stackOut))+2,32));
+		else
+		stackIn <= stackOut;
+		end if;
+	end if;
+	end process;
 	
 	--stackIncr <= -2 when MemWrite='1' and stackEn='1' else 2 when MemRead='1' and stackEn='1' else 0;
 	

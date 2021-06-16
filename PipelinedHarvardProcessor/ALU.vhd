@@ -44,11 +44,12 @@ std_logic_vector(unsigned(not std_logic_vector((unsigned('0' & OP2)) - (unsigned
 OP1(to_integer(32 - unsigned(OP2)))& std_logic_vector(shift_Left(unsigned(OP1),to_integer(unsigned(OP2)))) when "1000",  --SHL
 OP1(to_integer(unsigned(OP2)))& std_logic_vector(shift_Right(unsigned(OP1),to_integer(unsigned(OP2)))) when "1001", --SHR
 std_logic_vector((unsigned('0' & OP1)) + (unsigned('0' &OP2))) when "1111", --IADD
+std_logic_vector((unsigned('0' & OP1)) + (unsigned('0' &OP2))) when "0111", --STD LDD
 '0' & ZERO when others; -- ELSE
 
-tempFlag(0) <= FLAGCONTROL(0) when ALUControl="0001" or ALUControl="0010" or ALUCONTROL="0011" else '1' when Temp(31 downto 0)=ZERO else '0' ; 
-tempFlag(1) <= FLAGCONTROL(1) when ALUControl="0001" or ALUControl="0010" or ALUCONTROL="0011"  else Temp(31);
-tempFlag(2) <= '0' when ALUControl="0010" else '1' when ALUControl="0001" else FLAGCONTROL(2) when ALUControl="0110" or ALUControl="0000" or ALUCONTROL="0011" or ALUControl="0100"
+tempFlag(0) <= FLAGCONTROL(0) when ALUControl="0001" or ALUControl="0010" or ALUCONTROL="0011" or ALUControl="0111" else '1' when Temp(31 downto 0)=ZERO else '0' ; 
+tempFlag(1) <= FLAGCONTROL(1) when ALUControl="0001" or ALUControl="0010" or ALUCONTROL="0011" or ALUControl="0111"  else Temp(31);
+tempFlag(2) <= '0' when ALUControl="0010" else '1' when ALUControl="0001" else FLAGCONTROL(2) when ALUControl="0110" or ALUControl="0000" or ALUCONTROL="0011" or ALUControl="0100" or ALUControl="0111"
 			else '1' when ALUControl="1011" and OP1=ZERO
 			else '1' when ALUControl="1010" and OP1=FULL
 			else '1' when ALUControl="1100" and OP1>OP2

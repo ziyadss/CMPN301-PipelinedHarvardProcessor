@@ -18,10 +18,10 @@ ARCHITECTURE forwardingUnit_arch OF forwardingUnit IS
 BEGIN
 
     selData1 <= "01" WHEN data1Dst = dataMemDst and RegWriteMem='1' ELSE
-        "10" WHEN data1Dst = dataWbDst and RegWriteMem='1' ELSE
+        "10" WHEN data1Dst = dataWbDst and RegWriteWb='1' ELSE
         "00";
 
-    selData2 <= "01" WHEN data2Dst = dataMemDst and RegWriteWB='1' ELSE
+    selData2 <= "01" WHEN data2Dst = dataMemDst and RegWriteMem='1' ELSE
         "10" WHEN data2Dst = dataWbDst and RegWriteWb='1' ELSE
         "00";
 
