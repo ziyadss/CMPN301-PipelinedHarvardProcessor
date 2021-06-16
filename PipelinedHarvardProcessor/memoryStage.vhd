@@ -59,23 +59,23 @@ architecture archMemoryStage of memoryStage is
 	signal MemAdd: std_logic_vector(19 downto 0);
 	signal dataIn, dataOut: std_logic_vector(31 downto 0);
 	signal stackIn: std_logic_vector(31 downto 0) :=std_logic_vector(to_unsigned(2**20 - 2,32));
-	signal stackOut: std_logic_vector(31 downto 0);
+	signal stackOut: std_logic_vector(31 downto 0):=std_logic_vector(to_unsigned(2**20 - 2,32));
 	signal stackIncr: integer;
 	
 begin
 	
-	MemAdd <= stackIn(19 downto 0) when stackEn='1' else resALUin(19 downto 0);
+	MemAdd <= stackOut(19 downto 0) when stackEn='1' else resALUin(19 downto 0);
 	
-	dataIn <= "0000000000000000" & PC when DataSrc='1' and CallRetEn='0'
-	else dataStore when DataSrc='1' and CallRetEn='1'
+	dataIn <= "0000000000000000" & PC when DataSrc='1' and CallRetEn='1'
+	else dataStore when DataSrc='1' and MemWrite='1'
 	else resALUin;
 	
 	addCallRet <= dataOut(15 downto 0);
 	useRetAdd <= (not DataSrc) and CallRetEn;
 	
-	stackOut <= std_logic_vector(to_unsigned(to_integer(unsigned(stackIn)) + stackIncr,32));
+	stackIn <= std_logic_vector(to_unsigned(to_integer(unsigned(stackOut))-2,32)) when MemWrite='1' and stackEn='1' else std_logic_vector(to_unsigned(to_integer(unsigned(stackOut))+2,32)) when MemRead='1' and stackEn='1' else stackOut;
 	
-	stackIncr <= -2 when MemWrite='1' and stackEn='1' else 2 when MemRead='1' and stackEn='1';
+	--stackIncr <= -2 when MemWrite='1' and stackEn='1' else 2 when MemRead='1' and stackEn='1' else 0;
 	
 	Memory: RAM generic map(20, 16) port map(MemAdd, dataIn,dataOut, memWrite, clk, '0');
 	SP: registerDD generic map(32) port map(stackIn, stackOut, stackEn, clk, '0');

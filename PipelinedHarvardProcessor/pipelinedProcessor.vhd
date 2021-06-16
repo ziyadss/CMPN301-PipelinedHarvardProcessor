@@ -286,7 +286,7 @@ architecture archPipelinedProcessor of pipelinedProcessor is
 	signal WB_Dst	:	std_logic_vector(2 downto 0);
 	signal WB_Data	:	std_logic_vector(31 downto 0);
 	signal WB_En	:	std_logic;
-	signal Reg1_DE, Reg2_DE, shImm_DE, Imm_DE, Reg1_E, Reg2_E, shImm_E, Imm_E : std_logic_vector(31 downto 0);
+	signal Reg1_DE, Reg2_DE, Reg1_E, Reg2_E, shImm_E, Imm_E : std_logic_vector(31 downto 0);
 	
 	signal DoCallRet : std_logic;
 	
@@ -350,7 +350,7 @@ begin
 	
 	IF_ID_Buffer:  bufferFetchDecode port map(clk,nextPC_FD,instruction_FD,nextPC_D,instruction_D);
 	
-	Decode: decodeStage port map(clk,nextPC_D,instruction_D,WB_Data,WB_Dst,WB_En,Reg1_DE, Reg2_DE,Imm_DE,shImm_DE,nextPC_DE,instruction_DE,regWrite_DE,ALUSrc_DE,ALUControl_DE,RegDst_DE,MemWrite_DE,MemRead_DE,StackEn_DE,Mem2Reg_DE,CallRetEn_DE,FlagOp_DE,JmpOpEn_DE,JmpOP_DE,ImmVal_DE,inPort,inPort_DE,data1Src_DE, data2Src_DE,DataSrc_DE,outPortEn_DE );
+	Decode: decodeStage port map(clk,nextPC_D,instruction_D,WB_Data,WB_Dst,WB_En,Reg1_DE, Reg2_DE,immdVal_DE,shiftImmdVal_DE,nextPC_DE,instruction_DE,regWrite_DE,ALUSrc_DE,ALUControl_DE,RegDst_DE,MemWrite_DE,MemRead_DE,StackEn_DE,Mem2Reg_DE,CallRetEn_DE,FlagOp_DE,JmpOpEn_DE,JmpOP_DE,ImmVal_DE,inPort,inPort_DE,data1Src_DE, data2Src_DE,DataSrc_DE,outPortEn_DE );
 	
 	ID_EX_Buffer: bufferDecodeEx port map(clk, Reg1_DE, Reg2_DE, immdVal_DE, shiftImmdVal_DE, nextPC_DE, instruction_DE, regWrite_DE, ALUSrc_DE, ALUControl_DE, RegDst_DE, MemWrite_DE, MemRead_DE, StackEn_DE, Mem2Reg_DE, CallRetEn_DE, FlagOp_DE, JmpOpEn_DE, JmpOP_DE, ImmVal_DE, data1Src_DE, data2Src_DE, outPortEn_DE, DataSrc_DE, data1_E, data2_E, immdVal_E, shiftImmdVal_E, addOutput_E, instruction_E, regWrite_E, ALUSrc_E, ALUControl_E, RegDst_E, MemWrite_E, MemRead_E, StackEn_E, Mem2Reg_E, CallRetEn_E, FlagOp_E, JmpOpEn_E, JmpOP_E, ImmVal_E, data1Src_E, data2Src_E, outPortEn_E, DataSrc_E,inPort_DE,inPort_E);
 	

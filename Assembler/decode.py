@@ -26,7 +26,7 @@ def instruction(inst):
 
 
 def fillMemory(memory):
-    for i in range(max(memory.keys())):
+    for i in range(max(memory.keys())+6):
         if i not in memory:
             memory[i] = f'{0:016b}'
 
@@ -62,8 +62,8 @@ def asm2mem(fileName):
                 memory[address] = binInst
                 address = address+1
             else:
-                memory[address] = binInst[0:15]
-                memory[address+1] = binInst[16:31]
+                memory[address] = binInst[0:16]
+                memory[address+1] = binInst[16:32]
                 address = address+2
     
     fillMemory(memory)

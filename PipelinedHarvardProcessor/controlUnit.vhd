@@ -29,6 +29,23 @@ BEGIN
 	PROCESS (clk) IS
 	BEGIN
 		--IF rising_edge (clk) THEN
+			IF (opCode = "XXXXX") THEN --NOP
+				regWrite <= '0';
+				ALUSrc <= "00";
+				ALUControl <= "0000";
+				RegDst <= '0';
+				MemWrite <= '0';
+				MemRead <= '0';
+				StackEn <= '0';
+				Mem2Reg <= '0';
+				CallRetEn <= '0';
+				FlagOp <= '0';
+				JmpOpEn <= '0';
+				JmpOp <= "00";
+				ImmVal <= "00";
+				outPortEn <= '0';
+				DataSrc <= '0';
+			END IF;
 			IF (opCode = "00000") THEN --NOP
 				regWrite <= '0';
 				ALUSrc <= "00";
@@ -151,7 +168,7 @@ BEGIN
 			IF (opCode = "01010") THEN --AND
 				regWrite <= '1';
 				ALUSrc <= "01";
-				ALUControl <= "1100";
+				ALUControl <= "0100";
 				RegDst <= '1';
 				MemWrite <= '0';
 				MemRead <= '0';
@@ -231,7 +248,7 @@ BEGIN
 				JmpOp <= "00";
 				ImmVal <= "10";
 				outPortEn <= '0';
-				DataSrc <= '0';
+				DataSrc <= '1';
 			END IF;
 			IF (opCode = "10001") THEN --NOT
 				regWrite <= '1';
@@ -333,7 +350,7 @@ BEGIN
 				JmpOp <= "00";
 				ImmVal <= "00";
 				outPortEn <= '0';
-				DataSrc <= '0';
+				DataSrc <= '1';
 			END IF;
 			IF (opCode = "10111") THEN --POP
 				regWrite <= '1';
@@ -452,7 +469,7 @@ BEGIN
 				JmpOp <= "00";
 				ImmVal <= "01";
 				outPortEn <= '0';
-				DataSrc <= '0';
+				DataSrc <= '1';
 			END IF;
 			IF (opCode = "11110") THEN --IADD
 				regWrite <= '1';
@@ -471,10 +488,10 @@ BEGIN
 				outPortEn <= '0';
 				DataSrc <= '0';
 			END IF;
-			IF (opCode = "11111") THEN --LDM not different from Iadd ?????
-				regWrite <= '0';
+			IF (opCode = "11111") THEN --LDM
+				regWrite <= '1';
 				ALUSrc <= "11";
-				ALUControl <= "0000";
+				ALUControl <= "0011";
 				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '0';
