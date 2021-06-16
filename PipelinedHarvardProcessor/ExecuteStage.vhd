@@ -125,7 +125,7 @@ MUXOP1 : muxEX4 port map( data1In,aluResultMEM,aluResultWB,ZERO,SELDATA1 ,OP1OUT
 MUXOP2temp : muxEX4 port map(data2In,aluResultMEM,aluResultWB,ZERO,SELDATA2 ,OP2OUTtemp);
 
 
-MUXOP2 : muxEX4 port map(INport ,OP2OUTtemp,shiftImmdValIn,immdValIn,SELDATA2 ,OP2OUT);
+MUXOP2 : muxEX4 port map(INport ,OP2OUTtemp,shiftImmdValIn,immdValIn,ALUSrcIn ,OP2OUT);
 
 
 MUXDEST : muxEX3 port map( data1SrcIn , data2SrcIn , RegDstIn,OUTDEST);

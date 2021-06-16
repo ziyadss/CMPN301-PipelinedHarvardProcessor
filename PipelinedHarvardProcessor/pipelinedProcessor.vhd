@@ -60,7 +60,12 @@ architecture archPipelinedProcessor of pipelinedProcessor is
 			FlagOp : OUT STD_LOGIC;
 			JmpOpEn : OUT STD_LOGIC;
 			JmpOP : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
-			ImmVal : OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
+			ImmVal : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+			inPort : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+			inPort_DE : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+			data1SrcOut, data2SrcOut : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
+			DataSrc : OUT STD_LOGIC;
+			outPortEn : OUT STD_LOGIC
 		);
 	END component;
 	
@@ -107,9 +112,12 @@ architecture archPipelinedProcessor of pipelinedProcessor is
 			JmpOpEnOut : OUT STD_LOGIC;
 			JmpOPOut : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
 			ImmValOut : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
-			data1SrcOut, data2SrcOut : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+			data1SrcOut, data2SrcOut : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
 			outPortEnOut : OUT STD_LOGIC;
-			DataSrcOut : OUT STD_LOGIC
+			DataSrcOut : OUT STD_LOGIC;
+			
+			inPort_DE : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+			inPort_E : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 	
 		);
 	END component;
@@ -304,7 +312,6 @@ architecture archPipelinedProcessor of pipelinedProcessor is
 	signal dstReg_W	: std_logic_vector(2 downto 0);
 	
 	
-	signal data1_DE, data2_DE : STD_LOGIC_VECTOR(31 DOWNTO 0);
 	signal immdVal_DE : STD_LOGIC_VECTOR (31 DOWNTO 0);
 	signal shiftImmdVal_DE : STD_LOGIC_VECTOR (31 DOWNTO 0);
 	signal addOutput_DE : STD_LOGIC_VECTOR (15 DOWNTO 0);
@@ -334,7 +341,7 @@ architecture archPipelinedProcessor of pipelinedProcessor is
 	signal outPortEn_E : STD_LOGIC;
 	signal DataSrc_E : STD_LOGIC;
 	
-	signal inPort_E	: std_logic_vector(31 downto 0);
+	signal inPort_DE, inPort_E	: std_logic_vector(31 downto 0);
 	signal FU_Sel1, FU_Sel2 : std_logic_vector(1 downto 0);
 
 begin
@@ -343,12 +350,11 @@ begin
 	
 	IF_ID_Buffer:  bufferFetchDecode port map(clk,nextPC_FD,instruction_FD,nextPC_D,instruction_D);
 	
-	Decode: decodeStage port map(clk,nextPC_D,instruction_D,WB_Data,WB_Dst,WB_En,Reg1_DE, Reg2_DE,Imm_DE,shImm_DE,nextPC_DE,instruction_DE,regWrite_DE,ALUSrc_DE,ALUControl_DE,RegDst_DE,MemWrite_DE,MemRead_DE,StackEn_DE,Mem2Reg_DE,CallRetEn_DE,FlagOp_DE,JmpOpEn_DE,JmpOP_DE,ImmVal_DE);
-	--input port here
+	Decode: decodeStage port map(clk,nextPC_D,instruction_D,WB_Data,WB_Dst,WB_En,Reg1_DE, Reg2_DE,Imm_DE,shImm_DE,nextPC_DE,instruction_DE,regWrite_DE,ALUSrc_DE,ALUControl_DE,RegDst_DE,MemWrite_DE,MemRead_DE,StackEn_DE,Mem2Reg_DE,CallRetEn_DE,FlagOp_DE,JmpOpEn_DE,JmpOP_DE,ImmVal_DE,inPort,inPort_DE,data1Src_DE, data2Src_DE,DataSrc_DE,outPortEn_DE );
 	
-	ID_EX_Buffer: bufferDecodeEx port map(clk, data1_DE, data2_DE, immdVal_DE, shiftImmdVal_DE, nextPC_DE, instruction_DE, regWrite_DE, ALUSrc_DE, ALUControl_DE, RegDst_DE, MemWrite_DE, MemRead_DE, StackEn_DE, Mem2Reg_DE, CallRetEn_DE, FlagOp_DE, JmpOpEn_DE, JmpOP_DE, ImmVal_DE, data1Src_DE, data2Src_DE, outPortEn_DE, DataSrc_DE, data1_E, data2_E, immdVal_E, shiftImmdVal_E, addOutput_E, instruction_E, regWrite_E, ALUSrc_E, ALUControl_E, RegDst_E, MemWrite_E, MemRead_E, StackEn_E, Mem2Reg_E, CallRetEn_E, FlagOp_E, JmpOpEn_E, JmpOP_E, ImmVal_E, data1Src_E, data2Src_E, outPortEn_E, DataSrc_E);
+	ID_EX_Buffer: bufferDecodeEx port map(clk, Reg1_DE, Reg2_DE, immdVal_DE, shiftImmdVal_DE, nextPC_DE, instruction_DE, regWrite_DE, ALUSrc_DE, ALUControl_DE, RegDst_DE, MemWrite_DE, MemRead_DE, StackEn_DE, Mem2Reg_DE, CallRetEn_DE, FlagOp_DE, JmpOpEn_DE, JmpOP_DE, ImmVal_DE, data1Src_DE, data2Src_DE, outPortEn_DE, DataSrc_DE, data1_E, data2_E, immdVal_E, shiftImmdVal_E, addOutput_E, instruction_E, regWrite_E, ALUSrc_E, ALUControl_E, RegDst_E, MemWrite_E, MemRead_E, StackEn_E, Mem2Reg_E, CallRetEn_E, FlagOp_E, JmpOpEn_E, JmpOP_E, ImmVal_E, data1Src_E, data2Src_E, outPortEn_E, DataSrc_E,inPort_DE,inPort_E);
 	
-	Execute: ExecuteStage port map(clk, FU_Sel1, FU_Sel2, resALU_MW, resALU_M, inPort_E, data1_E, data2_E, immdVal_E, shiftImmdVal_E, addOutput_E, instruction_E, regWrite_E, ALUSrc_E, ALUControl_E, RegDst_E, MemWrite_E, MemRead_E, StackEn_E, Mem2Reg_E, CallRetEn_E, FlagOp_E, JmpOpEn_E, JmpOP_E, ImmVal_E, data1Src_E, data2Src_E, DataSrc_E, outPortEn_E, memWrite_EM, memRead_EM, stackEn_EM, DataSrc_EM, CallRetEn_EM, outPortEn_EM, Mem2Reg_EM, RegWrite_EM, outPort_EM, dataStore_EM, PC_EM, resALU_EM, dstReg_EM);
+	Execute: ExecuteStage port map(clk, FU_Sel1, FU_Sel2, resALU_W, resALU_M, inPort_E, data1_E, data2_E, immdVal_E, shiftImmdVal_E, addOutput_E, instruction_E, regWrite_E, ALUSrc_E, ALUControl_E, RegDst_E, MemWrite_E, MemRead_E, StackEn_E, Mem2Reg_E, CallRetEn_E, FlagOp_E, JmpOpEn_E, JmpOP_E, ImmVal_E, data1Src_E, data2Src_E, DataSrc_E, outPortEn_E, memWrite_EM, memRead_EM, stackEn_EM, DataSrc_EM, CallRetEn_EM, outPortEn_EM, Mem2Reg_EM, RegWrite_EM, outPort_EM, dataStore_EM, PC_EM, resALU_EM, dstReg_EM);
 	
 	EX_MEM_Buffer: bufferExMem port map(clk,memWrite_EM,memRead_EM,stackEn_EM,DataSrc_EM,CallRetEn_EM,memWrite_M,memRead_M,stackEn_M,DataSrc_M,CallRetEn_M,outPortEn_EM,Mem2Reg_EM,RegWrite_EM,outPortEn_M,Mem2Reg_M,RegWrite_M,outPort_EM,PC_EM,resALU_EM,dataStore_EM,dstReg_EM,outPort_M,PC_M,resALU_M,dataStore_M,dstReg_M);
 	

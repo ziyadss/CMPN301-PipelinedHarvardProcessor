@@ -28,7 +28,7 @@ ARCHITECTURE controlUnit_arch OF controlUnit IS
 BEGIN
 	PROCESS (clk) IS
 	BEGIN
-		IF rising_edge (clk) THEN
+		--IF rising_edge (clk) THEN
 			IF (opCode = "00000") THEN --NOP
 				regWrite <= '0';
 				ALUSrc <= "00";
@@ -186,7 +186,7 @@ BEGIN
 				regWrite <= '1';
 				ALUSrc <= "10";
 				ALUControl <= "1000";
-				RegDst <= '1';
+				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '0';
 				StackEn <= '0';
@@ -203,7 +203,7 @@ BEGIN
 				regWrite <= '1';
 				ALUSrc <= "10";
 				ALUControl <= "1001";
-				RegDst <= '1';
+				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '0';
 				StackEn <= '0';
@@ -237,7 +237,7 @@ BEGIN
 				regWrite <= '1';
 				ALUSrc <= "00";
 				ALUControl <= "0110";
-				RegDst <= '1';
+				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '0';
 				StackEn <= '0';
@@ -254,7 +254,7 @@ BEGIN
 				regWrite <= '1';
 				ALUSrc <= "00";
 				ALUControl <= "1010";
-				RegDst <= '1';
+				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '0';
 				StackEn <= '0';
@@ -271,7 +271,7 @@ BEGIN
 				regWrite <= '1';
 				ALUSrc <= "00";
 				ALUControl <= "1011";
-				RegDst <= '1';
+				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '0';
 				StackEn <= '0';
@@ -304,8 +304,8 @@ BEGIN
 			IF (opCode = "10101") THEN --IN
 				regWrite <= '1';
 				ALUSrc <= "00";
-				ALUControl <= "0000";
-				RegDst <= '1';
+				ALUControl <= "0011";
+				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '0';
 				StackEn <= '0';
@@ -339,7 +339,7 @@ BEGIN
 				regWrite <= '1';
 				ALUSrc <= "00";
 				ALUControl <= "0000";
-				RegDst <= '1';
+				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '1';
 				StackEn <= '1';
@@ -458,7 +458,7 @@ BEGIN
 				regWrite <= '1';
 				ALUSrc <= "11";
 				ALUControl <= "1111";
-				RegDst <= '1';
+				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '0';
 				StackEn <= '0';
@@ -472,10 +472,10 @@ BEGIN
 				DataSrc <= '0';
 			END IF;
 			IF (opCode = "11111") THEN --LDM not different from Iadd ?????
-				regWrite <= '1';
+				regWrite <= '0';
 				ALUSrc <= "11";
 				ALUControl <= "0000";
-				RegDst <= '1';
+				RegDst <= '0';
 				MemWrite <= '0';
 				MemRead <= '0';
 				StackEn <= '0';
@@ -488,6 +488,6 @@ BEGIN
 				outPortEn <= '0';
 				DataSrc <= '0';
 			END IF;
-		END IF;
+		--END IF;
 	END PROCESS;
 END controlUnit_arch;

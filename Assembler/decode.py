@@ -8,7 +8,9 @@ def instruction(inst):
     part = []
     part.append(ops[inst[0].upper()])
     if len(inst) > 1:
-        part.append(f'{int(inst[1][1],16):03b}')
+        if inst[0].upper()=="IN":
+            print('here')
+        part.append(f'{(int(inst[1][1],16)-1):03b}')
     if len(inst) > 2:
         part.append(None)
         if part[0][0:4] == "1110":
@@ -19,7 +21,7 @@ def instruction(inst):
         elif part[0][0:4] == "1111":
             part[2] = f'{int(inst[2],16):024b}'
         else:
-            part[2] = f'{int(inst[2][1],16):03b}'
+            part[2] = f'{(int(inst[2][1],16)-1):03b}'
     return part
 
 

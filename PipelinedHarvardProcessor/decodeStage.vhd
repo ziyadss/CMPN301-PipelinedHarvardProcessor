@@ -28,7 +28,12 @@ ENTITY decodeStage IS
 		FlagOp : OUT STD_LOGIC;
 		JmpOpEn : OUT STD_LOGIC;
 		JmpOP : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
-		ImmVal : OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
+		ImmVal : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+		inPort : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		inPort_DE : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		data1SrcOut, data2SrcOut : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
+		DataSrc : OUT STD_LOGIC;
+		outPortEn : OUT STD_LOGIC
 	);
 
 END decodeStage;
@@ -50,7 +55,9 @@ ARCHITECTURE decodeStage_arch OF decodeStage IS
 			FlagOp : OUT STD_LOGIC;
 			JmpOpEn : OUT STD_LOGIC;
 			JmpOP : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
-			ImmVal : OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
+			ImmVal : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
+			DataSrc : OUT STD_LOGIC;
+			outPortEn : OUT STD_LOGIC
 		);
 	END COMPONENT;
 
@@ -70,11 +77,13 @@ ARCHITECTURE decodeStage_arch OF decodeStage IS
 	--signal RegWrite,RegDst, MemWrite,MemRead,StackEn,Mem2Reg,CallRetEn,FlagOp,JmpOpEn : std_logic;
 
 BEGIN
-	controlUnitU : controlUnit PORT MAP(instructionIn(31 DOWNTO 27), clk, regWrite, ALUSrc, ALUControl, RegDst, MemWrite, MemRead, StackEn, Mem2Reg, CallRetEn, FlagOp, JmpOpEn, JmpOP, ImmVal);
+	controlUnitU : controlUnit PORT MAP(instructionIn(31 DOWNTO 27), clk, regWrite, ALUSrc, ALUControl, RegDst, MemWrite, MemRead, StackEn, Mem2Reg, CallRetEn, FlagOp, JmpOpEn, JmpOP, ImmVal,DataSrc, outPortEn);
 	registerFileU : registerFile GENERIC MAP(3, 32) PORT MAP(instructionIn(26 DOWNTO 24), instructionIn(23 DOWNTO 21), dst, datain, data1, data2, wEn, clk, '0');
 	shiftImmdVal <= (31 DOWNTO 5 => '0') & instructionIn(20 DOWNTO 16);
 	immdVal <= (31 DOWNTO 16 => '0') & instructionIn(15 DOWNTO 0);
 	addOutput <= addOutputFetch;
 	instructionOut <= instructionIn;
-
+	inPort_DE <= inPort;
+	data1SrcOut <= instructionIn(26 DOWNTO 24);
+	data2SrcOut <= instructionIn(23 DOWNTO 21);
 END decodeStage_arch;

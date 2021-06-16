@@ -27,11 +27,11 @@ begin
 	begin
 		if rising_edge(clk) and wEn='1' then
 			ram( to_integer(unsigned(address)) ) <= dataIn(2*unit-1 downto unit);
-			ram( to_integer(unsigned(address))+1)<= dataIn(unit-1 downto 0);
+			ram( to_integer(unsigned(address)+1))<= dataIn(unit-1 downto 0);
 		end if;
 	end process;
 	
-	dataOut <= ram( to_integer(unsigned(address)) ) & ram( to_integer(unsigned(address))+1 );
+	dataOut <= ram( to_integer(unsigned(address)) ) & ram( to_integer(unsigned(address)+1) );
 	
 end archRAM;
 

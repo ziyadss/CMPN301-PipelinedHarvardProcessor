@@ -45,9 +45,12 @@ ENTITY bufferDecodeEx IS
         JmpOpEnOut : OUT STD_LOGIC;
         JmpOPOut : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
         ImmValOut : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
-        data1SrcOut, data2SrcOut : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+        data1SrcOut, data2SrcOut : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
         outPortEnOut : OUT STD_LOGIC;
-        DataSrcOut : OUT STD_LOGIC
+        DataSrcOut : OUT STD_LOGIC;
+		
+		inPort_DE : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		inPort_E : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 
     );
 
@@ -134,6 +137,9 @@ BEGIN
 	FlagOpBuff : registerDD GENERIC MAP(1) PORT MAP(d(0)=>FlagOpIn, q(0)=>FlagOpOut, en=>'1', clk=>clk, rst=>'0');
 	JmpOpEnBuff : registerDD GENERIC MAP(1) PORT MAP(d(0)=>JmpOpEnIn, q(0)=>JmpOpEnOut, en=>'1', clk=>clk, rst=>'0');
 	JmpOPBuff : registerDD GENERIC MAP(2) PORT MAP(JmpOPIn, JmpOPOut, en=>'1', clk=>clk, rst=>'0');
+	inPortBuff : registerDD GENERIC MAP(32) PORT MAP(inPort_DE, inPort_E, '1', clk, '0');
 	
+	data1SrcBuf : registerDD GENERIC MAP(3) PORT MAP(data1SrcIn, data1SrcOut, '1', clk, '0');
+	data2SrcBuf : registerDD GENERIC MAP(3) PORT MAP(data2SrcIn, data2SrcOut, '1', clk, '0');
 
 END bufferDecodeEx_arch;
