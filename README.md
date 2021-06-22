@@ -9,3 +9,14 @@
  - Ali Hitham Ibrahim
  - Eslam Ashraf Abdelaziz
  - Zeyad Sameh Sobhy
+
+### Unimplemented:
+ - Hazard detection for load use cases
+ - Jumps
+ - Call & returns (execute stage)
+ - Reset in one cycle (currently takes two)
+ 
+### Notes:
+ - opCodes.xlsx might not reflect latest internal signals
+ - Assembler does not add IN instructions to do file (to be implemented?)
+ - TODO: further clean up files and repo, make public
