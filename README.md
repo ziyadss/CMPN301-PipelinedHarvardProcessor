@@ -18,5 +18,5 @@
  
 ### Notes:
  - opCodes.xlsx might not reflect latest internal signals
- - Assembler does not add IN instructions to do file (to be implemented?)
+ - Assembler does not fully support IN instructions as it doesnot create a do file (to be implemented?)
  - TODO: further clean up files and repo, make public

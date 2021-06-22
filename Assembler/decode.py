@@ -1,6 +1,11 @@
-import re
+# Generates .mem file for any .asm file in the ./asm/ directory.
+# Output is in the ./mem/ directory.
 
-fileNames = ["OneOperand", "TwoOperand", "Memory", "Branch"]
+import re
+import os
+
+fileNames = [n.removesuffix(".asm")
+             for n in os.listdir("./asm") if n.endswith(".asm")]
 ops = {'NOP': '00000', 'SETC': '00010', 'CLRC': '00011', 'RET': '00100', 'MOV': '01110', 'ADD': '01000', 'SUB': '01001', 'AND': '01010', 'OR': '01011', 'CALL': '10000', 'NOT': '10001', 'INC': '10010', 'DEC': '10011',
        'OUT': '10100', 'IN': '10101', 'PUSH': '10110', 'POP': '10111', 'JZ': '11000', 'JN': '11001', 'JC': '11010', 'JMP': '11011', 'IADD': '11110', 'LDM': '11111', 'LDD': '11100', 'STD': '11101', 'SHL': '01100', 'SHR': '01101'}
 
@@ -9,8 +14,6 @@ def instruction(inst):
     part = []
     part.append(ops[inst[0].upper()])
     if len(inst) > 1:
-        if inst[0].upper() == "IN":
-            print('here')
         part.append(f'{(int(inst[1][1],16)-1):03b}')
     if len(inst) > 2:
         part.append(None)
@@ -35,7 +38,7 @@ def fillMemory(memory):
 
 
 def outputMemory(memory):
-    with open(f"{fileName}.mem", 'w') as f:
+    with open(f"mem/{fileName}.mem", 'w') as f:
         f.write(r'''// memory data file (do not edit the following line - required for mem load use)
 // instance=/pipelinedprocessor/Fetch/RAM1/ram
 // format=mti addressradix=h dataradix=s version=1.0 wordsperline=4''')
@@ -46,7 +49,7 @@ def outputMemory(memory):
 
 
 def asm2mem(fileName):
-    strings = open(f"{fileName}.asm", 'r').read().splitlines()
+    strings = open(f"asm/{fileName}.asm", 'r').read().splitlines()
     insts = map(lambda x: re.sub(r'[(),]|#.*', ' ', x).split(), strings)
 
     memory = {}
